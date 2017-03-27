@@ -40,17 +40,6 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
 
-
-    // CHANGE THIS
-    // DEFINE METHODS for different API endpoints here
-    public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
-        // Can specify query string params directly or through RequestParams.
-        RequestParams params = new RequestParams();
-        params.put("format", "json");
-        client.get(apiUrl, params, handler);
-    }
-
     public void getTimeline(String count, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
@@ -82,37 +71,5 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("status", text);
         getClient().post(apiUrl, params, httpResponseHandler);
-    }
-
-/*
-//        getClient().get(apiUrl, params, new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
-//                Toast.makeText(TwitterApplication._instance(), "ToastText", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable error, JSONObject jsonObject) {
-//                Toast.makeText(TwitterApplication._instance(), "ToastText", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        HomeTimeline homeTimeline = retrofit.create(HomeTimeline.class);
-//        return homeTimeline.getHomeTimeline(count, sinceId);
-
- */
-
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-     * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
-
-    public interface HomeTimeline {
-        @GET("statuses/home_timeline.json")
-        Observable<SampleModel> getHomeTimeline(@Query("count") String count, @Query("since_id") String sinceId);
     }
 }

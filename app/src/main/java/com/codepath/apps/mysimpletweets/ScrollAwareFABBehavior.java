@@ -27,6 +27,4 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
             child.show();
         }
     }
-
-    // ...
 }

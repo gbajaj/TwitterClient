@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.View;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterClient;
 import com.codepath.apps.mysimpletweets.databinding.ActivityLoginBinding;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 

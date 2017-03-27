@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.fragments;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -17,6 +17,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.databinding.ComposeDialogFragmentLayoutBinding;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -46,7 +48,7 @@ public class ComposeDialogFragment extends DialogFragment {
 
     ComposeDialogFragmentLayoutBinding binding;
 
-    interface ComposeTweet {
+    public interface ComposeTweet {
         void onTweetCreated(Tweet tweet);
     }
 

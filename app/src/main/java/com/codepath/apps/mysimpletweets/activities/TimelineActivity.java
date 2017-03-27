@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,6 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.codepath.apps.mysimpletweets.fragments.ComposeDialogFragment;
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.TwitterApplication;
 import com.codepath.apps.mysimpletweets.adapters.TweetsAdaptersEndlessScrollListener;
 import com.codepath.apps.mysimpletweets.adapters.TweetsArrayAdapter;
 import com.codepath.apps.mysimpletweets.databinding.ActivityTimelineBinding;
@@ -178,7 +181,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     private void fetchOlderTweets() {
         TwitterApplication.getRestClient().getOlderTweets("25", "" + (userPreferences.getOldestTweetId() - 1), new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Toast.makeText(TimelineActivity.this, "Passed", Toast.LENGTH_SHORT).show();
 
                 try {
                     //Remove the null object to remove the progress bar
@@ -229,7 +231,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     private void fetchTweetsSince() {
         TwitterApplication.getRestClient().getTimeline("25", userPreferences.getMostRecentTweetId(), new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Toast.makeText(TimelineActivity.this, "Passed", Toast.LENGTH_SHORT).show();
 
                 try {
                     ArrayList<Tweet> ret = Tweet.fromJSONArray(response);
