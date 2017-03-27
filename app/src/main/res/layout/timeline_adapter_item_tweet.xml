@@ -92,8 +92,9 @@
                     android:linksClickable="true"
                     android:maxLength="140"
                     android:maxLines="4"
-                    android:textColor="#80000000"
-                    android:textSize="12sp"
+                    android:textColor="#000000"
+                    android:textColorLink="@color/tweeter_normal_blue"
+                    android:textSize="14sp"
                     tools:text="sfdsf" />
 
             </RelativeLayout>
@@ -105,6 +106,7 @@
                 android:layout_alignLeft="@+id/item_tweet_body_layout"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/item_tweet_body_layout"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_reply_black_24px" />
 
             <ImageView
@@ -113,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/ic_repeat_black_24px" />
 
             <TextView
@@ -120,6 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/item_tweet_retweet_imgv"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
@@ -135,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="100dp"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/item_tweet_retweet_imgv"
                 android:background="@drawable/star_selector" />
 
@@ -143,6 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/item_tweet_starred_imgv"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
