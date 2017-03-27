@@ -34,6 +34,10 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_PROG = 0;
     DateHelper dateHelper = new DateHelper();
 
+    public interface TweetAction {
+        void reply(Tweet tweet);
+    }
+
     public TweetsArrayAdapter(Context context, List<Tweet> list) {
         this.context = context;
         this.list = list;
@@ -95,6 +99,11 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }).bitmapTransform(
                         new RoundedCornersTransformation(context, 5, 5)).into(holder.binding.itemTweetUserImage);
             }
+            holder.binding.itemTweetReplyImgv.setOnClickListener(v -> {
+                if (context instanceof TweetAction) {
+                    ((TweetAction) context).reply(tweet);
+                }
+            });
         } else {
             ((ProgressViewHolder) viewHolder).binding.progressBar.setIndeterminate(true);
         }

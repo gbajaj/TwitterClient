@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +27,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -35,6 +38,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class ComposeDialogFragment extends DialogFragment {
     public static final String TAG = ComposeDialogFragment.class.getSimpleName();
+    public static final String REPLY_TWEET = "REPLY_TWEET";
     Context context = TwitterApplication.instance();
     ComposeTweet composeTweet;
     UserPreferences userPreferences = new UserPreferences();
@@ -59,10 +63,30 @@ public class ComposeDialogFragment extends DialogFragment {
             binding.composeDialogUserNameTv.setText(currentUser.getName());
             binding.composeDialogScreenNameTv.setText("@" + currentUser.getScreenName());
         }
-        String draftTweet = userPreferences.getDraftedTweet();
-        binding.composeDialogEdittext.setText(draftTweet);
-        updateTweetButton();
-        binding.composeDialogTweetCharsCntTv.setText("" + (140 - draftTweet.length()));
+        Bundle bundle = getArguments();
+        Tweet tweetToReply = null;
+        String draftTweet = "";
+        if (bundle!= null && bundle.getParcelable(REPLY_TWEET) != null) {
+            tweetToReply = (Tweet) Parcels.unwrap(bundle.getParcelable(REPLY_TWEET));
+            String screenName = tweetToReply.getUser().getScreenName();
+            draftTweet = "@"+screenName;
+
+            binding.itemTweetReplyToTv.setVisibility(View.VISIBLE);
+            binding.itemTweetReplyToTv.setText("in reply to " + screenName);
+        } else {
+            draftTweet = userPreferences.getDraftedTweet();
+        }
+        if (TextUtils.isEmpty(draftTweet) == false) {
+            updateTweetButton();
+
+            binding.composeDialogEdittext.setText(draftTweet);
+            binding.composeDialogTweetCharsCntTv.setText("" + (140 - draftTweet.length()));
+            binding.composeDialogEdittext.setSelection(draftTweet.length());
+            InputMethodManager imm = (InputMethodManager)context.
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(binding.composeDialogEdittext,
+                    InputMethodManager.SHOW_FORCED);
+        }
         binding.composeDialogCloseImgbtn.setOnClickListener(v -> {
             Editable editable = binding.composeDialogEdittext.getText();
             if (editable.length() > 0) {
@@ -149,6 +173,7 @@ public class ComposeDialogFragment extends DialogFragment {
         });
         return view;
     }
+
 
     @Override
     public void onResume() {

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -27,13 +28,14 @@ import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransacti
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeTweet {
+public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeTweet, TweetsArrayAdapter.TweetAction {
     RecyclerView recyclerView;
     TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
@@ -122,16 +124,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         });
 
         activityTimelineBinding.composeFab.setOnClickListener(v -> {
-            FragmentManager fm = getSupportFragmentManager();
-            ComposeDialogFragment composeDialogFragment = new ComposeDialogFragment();
-            composeDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
-
-            composeDialogFragment.show(fm, "Tag");
+            launchCompose(null);
         });
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         activityTimelineBinding.toolbar.setTitle("");
         activityTimelineBinding.toolbar.setSubtitle("");
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
     }
 
@@ -243,4 +244,21 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     }
 
 
+    @Override
+    public void reply(Tweet tweet) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ComposeDialogFragment.REPLY_TWEET, Parcels.wrap(tweet));
+        launchCompose(bundle);
+    }
+
+    private void launchCompose(Bundle b) {
+        FragmentManager fm = getSupportFragmentManager();
+        ComposeDialogFragment composeDialogFragment = new ComposeDialogFragment();
+        if (b != null) {
+            composeDialogFragment.setArguments(b);
+        }
+        composeDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
+
+        composeDialogFragment.show(fm, "Tag");
+    }
 }

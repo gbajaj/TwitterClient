@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:textColor="#80000000"
-                    tools:text="@grv_bajaj" />
+                    tools:text="\@grv_bajaj" />
             </LinearLayout>
 
             <ImageView
@@ -57,28 +57,38 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/item_tweet_reply_to_tv"
+            android:layout_below="@+id/compose_dialog_topbar"
+            android:layout_width="wrap_content"
+            tools:text="in reply to someone"
+            android:textColor="#ABB8C8"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/in_reply_to_down_arrrow_drawable"
+            android:layout_height="wrap_content" />
+
         <EditText
             android:id="@+id/compose_dialog_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/compose_dialog_topbar"
+            android:layout_below="@+id/item_tweet_reply_to_tv"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="20dp"
+            android:background="@null"
             android:gravity="top"
-            android:textColorHint="#80000000"
-            android:textColor="#000000"
             android:hint="what\'s happening?"
             android:inputType="textMultiLine"
-            android:background="@null"
             android:maxLength="140"
             android:minHeight="100dp"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="#000000"
+            android:textColorHint="#80000000" />
 
         <View
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_above="@+id/compose_dialog_submit_layout"
+            android:layout_marginBottom="5dp"
             android:background="#80000000" />
 
         <LinearLayout

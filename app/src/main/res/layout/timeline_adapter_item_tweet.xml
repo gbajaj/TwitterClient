@@ -2,11 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
         android:id="@+id/article_adaptor_article_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardUseCompatPadding="true">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
