@@ -66,23 +66,31 @@ public class ComposeDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         Tweet tweetToReply = null;
         String draftTweet = "";
-        if (bundle!= null && bundle.getParcelable(REPLY_TWEET) != null) {
+        //Check if user is replying
+        if (bundle != null && bundle.getParcelable(REPLY_TWEET) != null) {
             tweetToReply = (Tweet) Parcels.unwrap(bundle.getParcelable(REPLY_TWEET));
             String screenName = tweetToReply.getUser().getScreenName();
-            draftTweet = "@"+screenName;
+            draftTweet = "@" + screenName;
 
             binding.itemTweetReplyToTv.setVisibility(View.VISIBLE);
             binding.itemTweetReplyToTv.setText("in reply to " + screenName);
         } else {
+            //Check if ther is a drafted tweet
             draftTweet = userPreferences.getDraftedTweet();
         }
-        if (TextUtils.isEmpty(draftTweet) == false) {
-            updateTweetButton();
 
+        //If there is a draft or user is replying to some tweet; fill the edittext
+        if (TextUtils.isEmpty(draftTweet) == false) {
+            //fill the edit text with the content
             binding.composeDialogEdittext.setText(draftTweet);
+            //update the character count
             binding.composeDialogTweetCharsCntTv.setText("" + (140 - draftTweet.length()));
+            //Move the cursor to the end
             binding.composeDialogEdittext.setSelection(draftTweet.length());
-            InputMethodManager imm = (InputMethodManager)context.
+            //Highlight the tweet button by enabling
+            updateTweetButton();
+            //Bring up the soft keyboard
+            InputMethodManager imm = (InputMethodManager) context.
                     getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(binding.composeDialogEdittext,
                     InputMethodManager.SHOW_FORCED);
@@ -103,13 +111,12 @@ public class ComposeDialogFragment extends DialogFragment {
                         .setPositiveButton("Save",
                                 (dialog, which) -> {
                                     userPreferences.saveDraft(text);
-                                    Toast.makeText(context, "Pressed OK", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
                                 })
                         // negative button
                         .setNegativeButton("Discard",
                                 (dialog, which) -> {
                                     userPreferences.resetDraft();
-                                    Toast.makeText(context, "Cancel", Toast.LENGTH_SHORT).show();
                                 }).create().show();
             }
             dismiss();
@@ -118,11 +125,11 @@ public class ComposeDialogFragment extends DialogFragment {
             Editable editable = binding.composeDialogEdittext.getText();
             TwitterApplication.getRestClient().tweet(editable.toString(), new JsonHttpResponseHandler() {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    Toast.makeText(context, "Tweeted", Toast.LENGTH_SHORT).show();
                     try {
                         Tweet tweet = Tweet.fromJSON(response);
                         ComposeTweet listener = composeTweet;
                         if (listener != null) {
+                            //Tweet published successfully time line should be updated
                             listener.onTweetCreated(tweet);
                         }
                         dismiss();
@@ -140,7 +147,7 @@ public class ComposeDialogFragment extends DialogFragment {
                  * @param errorResponse parsed response if any
                  */
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Toast.makeText(context, "Tweet Failed ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Please Try Again!", Toast.LENGTH_SHORT).show();
                 }
             });
         });
