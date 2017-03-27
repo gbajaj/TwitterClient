@@ -23,6 +23,7 @@ import com.codepath.apps.mysimpletweets.databinding.ComposeDialogFragmentLayoutB
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.models.User_Table;
+import com.codepath.apps.mysimpletweets.network.helper.NetworkConnectivityHelper;
 import com.codepath.apps.mysimpletweets.storage.UserPreferences;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -125,6 +126,10 @@ public class ComposeDialogFragment extends DialogFragment {
         });
         binding.composeDialogTweetBtn.setOnClickListener(v -> {
             Editable editable = binding.composeDialogEdittext.getText();
+            if (NetworkConnectivityHelper.isNetworkAvailable() == false) {
+                notifyNoNetwork();
+                return;
+            }
             TwitterApplication.getRestClient().tweet(editable.toString(), new JsonHttpResponseHandler() {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     try {
@@ -183,6 +188,15 @@ public class ComposeDialogFragment extends DialogFragment {
         return view;
     }
 
+    private void notifyNoNetwork() {
+        showToast("Network Not Connected");
+    }
+
+    private void showToast(String text) {
+        if (TextUtils.isEmpty(text) == false) {
+            Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onResume() {

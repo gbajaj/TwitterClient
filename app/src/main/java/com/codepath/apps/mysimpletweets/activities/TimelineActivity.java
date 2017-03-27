@@ -229,6 +229,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     }
 
     private void fetchTweetsSince() {
+        if (NetworkConnectivityHelper.isNetworkAvailable() == false) {
+            notifyNoNetwork();
+            return;
+        }
         TwitterApplication.getRestClient().getTimeline("25", userPreferences.getMostRecentTweetId(), new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
