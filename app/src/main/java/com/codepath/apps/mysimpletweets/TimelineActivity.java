@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,17 +36,18 @@ import java.util.Collections;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeTweet, TweetsArrayAdapter.TweetAction {
+public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeTweet, TweetsArrayAdapter.TweetAction, SwipeRefreshLayout.OnRefreshListener {
     RecyclerView recyclerView;
     TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
     UserPreferences userPreferences = new UserPreferences();
+    ActivityTimelineBinding activityTimelineBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActivityTimelineBinding activityTimelineBinding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
+        activityTimelineBinding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
 
         recyclerView = activityTimelineBinding.rvTweets;
         tweets = new ArrayList<>();
@@ -133,7 +135,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-
+        //Swipe to Refresh
+        activityTimelineBinding.swipeContainer.setOnRefreshListener(this);
     }
 
     @Override
@@ -224,6 +227,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
                     }
                     tweets.addAll(0, ret);
                     aTweets.notifyDataSetChanged();
+                    activityTimelineBinding.swipeContainer.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -238,7 +242,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
              * @param errorResponse parsed response if any
              */
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimelineActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                if (activityTimelineBinding.swipeContainer.isRefreshing()) {
+                    activityTimelineBinding.swipeContainer.setRefreshing(false);
+                    Toast.makeText(TimelineActivity.this, "Error Refreshing", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
@@ -260,5 +268,10 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         composeDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.Dialog_FullScreen);
 
         composeDialogFragment.show(fm, "Tag");
+    }
+
+    @Override
+    public void onRefresh() {
+        fetchTweetsSince();
     }
 }
