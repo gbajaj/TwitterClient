@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <RelativeLayout
+            android:id="@+id/compose_dialog_topbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/compose_dialog_close_imgbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/ic_close" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/compose_dialog_profile_imgv"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/compose_dialog_user_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:textColor="@android:color/black"
+                    tools:text="Gaurav Bajaj" />
+
+                <TextView
+                    android:id="@+id/compose_dialog_screen_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:textColor="#80000000"
+                    tools:text="@grv_bajaj" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/compose_dialog_profile_imgv"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="10dp"
+                tools:src="@drawable/ic_launcher" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/compose_dialog_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compose_dialog_topbar"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="top"
+            android:textColorHint="#80000000"
+            android:textColor="#000000"
+            android:hint="what\'s happening?"
+            android:inputType="textMultiLine"
+            android:background="@null"
+            android:maxLength="140"
+            android:minHeight="100dp"
+            android:padding="10dp" />
+
+        <View
+            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/compose_dialog_submit_layout"
+            android:background="#80000000" />
+
+        <LinearLayout
+            android:id="@+id/compose_dialog_submit_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/compose_dialog_tweet_chars_cnt_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="140" />
+
+            <TextView
+                android:id="@+id/compose_dialog_tweet_btn"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/tweet_button_selector"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:text="Tweet"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

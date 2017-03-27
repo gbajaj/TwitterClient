@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/article_adaptor_article_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="130dp"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/item_tweet_user_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp" />
+
+            <RelativeLayout
+                android:id="@+id/item_tweet_body_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/item_tweet_user_image"
+                android:layout_toRightOf="@+id/item_tweet_user_image">
+
+                <TextView
+                    android:id="@+id/item_tweet_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:ellipsize="end"
+                    android:maxLength="140"
+                    android:maxLines="4"
+                    android:maxWidth="200sp"
+                    android:textColor="#ff000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Screen Name" />
+
+                <TextView
+                    android:id="@+id/item_tweet_user_screen_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/item_tweet_user_name"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:maxWidth="150sp"
+                    android:textColor="#aa000000"
+                    android:textSize="14sp"
+                    tools:text="\@Screenname" />
+
+                <TextView
+                    android:id="@+id/item_tweet_user_screen_name_dot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toRightOf="@+id/item_tweet_user_screen_name"
+                    android:maxLines="1"
+                    android:text="."
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/item_tweet_relative_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/item_tweet_user_screen_name_dot"
+                    android:maxLines="1"
+
+                    android:textColor="#aa000000"
+                    android:textSize="14sp"
+                    tools:text="24h" />
+
+                <TextView
+                    android:id="@+id/item_tweet_body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/item_tweet_user_screen_name"
+                    android:layout_marginTop="5dp"
+                    android:autoLink="all"
+                    android:ellipsize="end"
+                    android:linksClickable="true"
+                    android:maxLength="140"
+                    android:maxLines="4"
+                    android:textColor="#80000000"
+                    android:textSize="12sp"
+                    tools:text="sfdsf" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/item_tweet_reply_imgv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/item_tweet_body_layout"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/item_tweet_body_layout"
+                android:src="@drawable/ic_reply_black_24px" />
+
+            <ImageView
+                android:id="@+id/item_tweet_retweet_imgv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/ic_repeat_black_24px" />
+
+            <TextView
+                android:id="@+id/item_tweet_retweet_count"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/item_tweet_retweet_imgv"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textColor="#80000000"
+                android:textSize="12sp"
+                tools:text="7635fd7366" />
+
+            <ImageView
+                android:id="@+id/item_tweet_starred_imgv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="100dp"
+                android:layout_toRightOf="@+id/item_tweet_retweet_imgv"
+                android:background="@drawable/star_selector" />
+
+            <TextView
+                android:id="@+id/item_tweet_starred_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/item_tweet_starred_imgv"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textColor="#80000000"
+                android:textSize="12sp"
+                tools:text="76353" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

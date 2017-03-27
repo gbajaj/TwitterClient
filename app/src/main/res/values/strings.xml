@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Awesome Tweets</string>
+    <string name="login_label">Connect to Twitter</string>
+    <string name="timeline_activity_title">Home Timeline</string>
+    <string name="tweet_data_most_recent_tweet_id">tweet_data_most_recent_tweet_id</string>
+    <string name="tweet_data_oldest_tweet_id">tweet_data_oldest_tweet_id</string>
+    <string name="tweet_data_draft_tweet">tweet_data_draft_tweet</string>
+
+    <!--User-->
+    <string name="user_data_current_user_id">user_data_current_user_id</string>
+
+</resources>
