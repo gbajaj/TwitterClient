@@ -29,6 +29,18 @@ public class UserPreferences {
         editor.commit();
     }
 
+    public String getMostRecentMentionId() {
+        return sharedPreferences.getString(context.getString(R.string.tweet_data_most_recent_mention_id), "1");
+    }
+
+    public void setMostRecentMentionId(String mentionId) {
+        if (TextUtils.isEmpty(mentionId)) {
+            throw new IllegalArgumentException("Mention Tweet Id can't be null or empty!");
+        }
+        editor.putString(context.getString(R.string.tweet_data_most_recent_mention_id), mentionId);
+        editor.commit();
+    }
+
     public Long getOldestTweetId() {
         return sharedPreferences.getLong(context.getString(R.string.tweet_data_oldest_tweet_id), Long.MAX_VALUE);
     }
@@ -38,6 +50,18 @@ public class UserPreferences {
             throw new IllegalArgumentException("Tweet Id can't be null");
         }
         editor.putLong(context.getString(R.string.tweet_data_oldest_tweet_id), tweetId);
+        editor.commit();
+    }
+
+    public Long getOldestMentionsId() {
+        return sharedPreferences.getLong(context.getString(R.string.tweet_data_oldest_mention_id), Long.MAX_VALUE);
+    }
+
+    public void setOldestMentionId(Long mentionId) {
+        if (mentionId == null) {
+            throw new IllegalArgumentException("Mentions Tweet Id can't be null");
+        }
+        editor.putLong(context.getString(R.string.tweet_data_oldest_mention_id), mentionId);
         editor.commit();
     }
 

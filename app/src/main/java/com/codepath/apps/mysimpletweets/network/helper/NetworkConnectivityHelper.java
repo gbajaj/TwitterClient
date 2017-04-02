@@ -3,6 +3,8 @@ package com.codepath.apps.mysimpletweets.network.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.TwitterApplication;
 
@@ -34,5 +36,15 @@ public class NetworkConnectivityHelper {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static void notifyNoNetwork(Context context) {
+        showToast(context, "Network Not Connected");
+    }
+
+    public static void showToast(Context context, String text) {
+        if (TextUtils.isEmpty(text) == false) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        }
     }
 }

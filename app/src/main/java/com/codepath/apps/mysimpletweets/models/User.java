@@ -1,5 +1,7 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import android.text.TextUtils;
+
 import com.codepath.apps.mysimpletweets.storage.MyTwitterDataBase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -27,11 +29,11 @@ import org.parceler.Parcel;
             "is_translator": false,
             "profile_link_color": "0084B4",
             "entities": {
-            "url": {
+            "mediaUrl": {
             "urls": [
             {
             "expanded_url": "http://about.me/raffi.krikorian",
-            "url": "http://t.co/eNmnM6q",
+            "mediaUrl": "http://t.co/eNmnM6q",
             "indices": [
             0,
             19
@@ -47,7 +49,7 @@ import org.parceler.Parcel;
             }
             },
             "default_profile": true,
-            "url": "http://t.co/eNmnM6q",
+            "mediaUrl": "http://t.co/eNmnM6q",
             "contributors_enabled": false,
             "favourites_count": 724,
             "utc_offset": -28800,
@@ -92,6 +94,25 @@ public class User extends BaseModel {
     String profileImage;
     @Column
     int favouritesCount;
+    @Column
+    String description;
+    @Column
+    int followersCount;
+    @Column
+    int followingCount;
+    @Column
+    String profileBannerUrl;
+
+    public Boolean isFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Boolean following) {
+        this.following = following;
+    }
+
+    @Column
+    Boolean following = Boolean.FALSE;
 
 
     public String getName() {
@@ -114,6 +135,22 @@ public class User extends BaseModel {
         return profileImage;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFollowingCount() {
+        return followingCount;
+    }
+
+    public String getProfileBannerUrl() {
+        return profileBannerUrl;
+    }
+
     public static User fromJSON(JSONObject jsonObject) throws JSONException {
         User user = new User();
         user.name = jsonObject.getString("name");
@@ -121,6 +158,14 @@ public class User extends BaseModel {
         user.screenName = jsonObject.getString("screen_name");
         user.profileImage = jsonObject.getString("profile_image_url");
         user.favouritesCount = jsonObject.getInt("favourites_count");
+        user.description = jsonObject.getString("description");
+        user.followersCount = jsonObject.getInt("followers_count");
+        user.followingCount = jsonObject.getInt("friends_count");
+        if (jsonObject.has("profile_banner_url")) {
+            user.profileBannerUrl = jsonObject.getString("profile_banner_url");
+        }
+
+        user.following = jsonObject.getBoolean("following");
 
         return user;
     }

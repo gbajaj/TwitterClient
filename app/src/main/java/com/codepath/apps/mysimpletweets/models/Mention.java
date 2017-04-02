@@ -18,8 +18,8 @@ import java.util.ArrayList;
  * Created by gauravb on 3/22/17.
  */
 @Table(database = MyTwitterDataBase.class)
-@Parcel(analyze = {Tweet.class})
-public class Tweet extends BaseModel {
+@Parcel(analyze = {Mention.class})
+public class Mention extends BaseModel {
     @Column
     String body;
 
@@ -47,16 +47,11 @@ public class Tweet extends BaseModel {
     @Column
     int retweetCount;
     @Column
-    Boolean mentioned;
-    @Column
     Boolean hasRetweetStatus;
     @Column
     String reTweetText;
     @ForeignKey(saveForeignKeyModel = false)
     User retweetUser;
-    @ForeignKey(saveForeignKeyModel = false)
-    Media media;
-
     //Deserialize
 
     public boolean isFavorited() {
@@ -67,42 +62,31 @@ public class Tweet extends BaseModel {
         return retweetCount;
     }
 
-    public static Tweet fromJSON(JSONObject jsonObject, boolean userMention) throws JSONException {
-        Tweet tweet = new Tweet();
-        tweet.body = jsonObject.getString("text");
-        tweet.id = jsonObject.getLong("id");
-        tweet.createdAt = jsonObject.getString("created_at");
-        tweet.favorited = jsonObject.getBoolean("favorited");
-        tweet.retweetCount = jsonObject.getInt("retweet_count");
-        tweet.mentioned = userMention;
-        tweet.hasRetweetStatus = Boolean.FALSE;
+    public static Mention fromJSON(JSONObject jsonObject) throws JSONException {
+        Mention mention = new Mention();
+        mention.body = jsonObject.getString("text");
+        mention.id = jsonObject.getLong("id");
+        mention.createdAt = jsonObject.getString("created_at");
+        mention.favorited = jsonObject.getBoolean("favorited");
+        mention.retweetCount = jsonObject.getInt("retweet_count");
+        mention.hasRetweetStatus = Boolean.FALSE;
         if (jsonObject.has("retweeted_status")) {
             JSONObject retweetStatus = jsonObject.getJSONObject("retweeted_status");
             if (retweetStatus != null) {
-                tweet.hasRetweetStatus = true;
-                tweet.reTweetText = retweetStatus.getString("text");
-                tweet.retweetUser = User.fromJSON(retweetStatus.getJSONObject("user"));
+                mention.hasRetweetStatus = true;
+                mention.reTweetText = retweetStatus.getString("text");
+                mention.retweetUser = User.fromJSON(retweetStatus.getJSONObject("user"));
             }
         }
-        tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
 
-        JSONObject entities = jsonObject.getJSONObject("entities");
-
-        ArrayList<Media> list = Media.fromJSONArray(entities.optJSONArray("media"));
-        if (list != null && list.isEmpty() == false) {
-            tweet.media = list.get(0);
-        }
-        return tweet;
+        mention.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        return mention;
     }
 
-    public Boolean getMentioned() {
-        return mentioned;
-    }
-
-    public static ArrayList<Tweet> fromJSONArray(JSONArray jsonArray, boolean userMention) throws JSONException {
-        ArrayList<Tweet> list = new ArrayList<>();
+    public static ArrayList<Mention> fromJSONArray(JSONArray jsonArray) throws JSONException {
+        ArrayList<Mention> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            list.add(fromJSON(jsonArray.getJSONObject(i), userMention));
+            list.add(fromJSON(jsonArray.getJSONObject(i)));
         }
         return list;
     }
@@ -121,9 +105,5 @@ public class Tweet extends BaseModel {
 
     public User getRetweetUser() {
         return retweetUser;
-    }
-
-    public Media getMedia() {
-        return media;
     }
 }

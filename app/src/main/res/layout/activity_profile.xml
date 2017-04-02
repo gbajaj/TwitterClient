@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/activity_profile_user_header_rv"
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <ImageView
+                android:id="@+id/activity_profile_user_banner_image"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/banner_drawable"
+                android:scaleType="fitXY"
+                android:minHeight="100dp" />
+
+            <ImageView
+                android:id="@+id/activity_profile_user_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="65dp" />
+
+            <ImageView
+                android:id="@+id/activity_profile_follow"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/activity_profile_user_image"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/border_button"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_follow" />
+
+            <ImageView
+                android:id="@+id/activity_profile_followed"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/activity_profile_user_image"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/twitter_blue_background"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_check" />
+
+            <ProgressBar
+                android:id="@+id/activity_profile_follow_progressBar"
+                style="@android:style/Widget.Holo.ProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="@drawable/border_button"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/activity_profile_user_image"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/activity_profile_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_profile_user_image"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="This is a long screen name" />
+
+            <TextView
+                android:id="@+id/activity_profile_screen_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_profile_user_name"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@+id/item_tweet_user_name"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:textColor="#aa000000"
+                android:textSize="14sp"
+                tools:text="\@Verylongscreenaname" />
+
+            <TextView
+                android:id="@+id/activity_profile_user_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_profile_screen_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLength="140"
+                android:maxLines="4"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                tools:text="This is a long screen name This is a long screen nameThis is a long screen nameThis is a long screen nameThis is a long screen name this isa" />
+
+            <TextView
+                android:id="@+id/activity_profile_following_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_profile_user_description"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="650" />
+
+            <TextView
+                android:id="@+id/activity_profile_following_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/activity_profile_following_count_tv"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/activity_profile_following_count_tv"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:text="FOLLOWING"
+                android:textColor="#aa000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/activity_profile_follower_count_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/activity_profile_following_text"
+                android:layout_marginLeft="30dp"
+                android:layout_toRightOf="@id/activity_profile_following_text"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:textColor="#ff000000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="50615" />
+
+            <TextView
+                android:id="@+id/activity_profile_follower_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/activity_profile_follower_count_tv"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/activity_profile_follower_count_tv"
+                android:ellipsize="end"
+                android:maxLength="40"
+                android:maxLines="1"
+                android:text="FOLLOWERS"
+                android:textColor="#aa000000"
+                android:textSize="14sp" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/activity_profile_user_header_rv"
+
+            android:orientation="vertical">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/sliding_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="fixed" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="1"
+                android:background="@android:color/white" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

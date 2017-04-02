@@ -133,7 +133,7 @@ public class ComposeDialogFragment extends DialogFragment {
             TwitterApplication.getRestClient().tweet(editable.toString(), new JsonHttpResponseHandler() {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     try {
-                        Tweet tweet = Tweet.fromJSON(response);
+                        Tweet tweet = Tweet.fromJSON(response, true);
                         ComposeTweet listener = composeTweet;
                         if (listener != null) {
                             //Tweet published successfully time line should be updated

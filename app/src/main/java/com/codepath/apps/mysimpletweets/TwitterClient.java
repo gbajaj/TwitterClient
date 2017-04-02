@@ -1,20 +1,13 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
-import android.text.TextUtils;
 
-import com.codepath.apps.mysimpletweets.models.SampleModel;
 import com.codepath.oauth.OAuthBaseClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
-
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
 
 /*
  * 
@@ -40,13 +33,57 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
 
-    public void getTimeline(String count, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+    public void getTimeline(String count, String max_id, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
         params.put("count", count);
-        if (TextUtils.isEmpty(sinceId))
-            throw new IllegalArgumentException("since_id is not valid");
-        params.put("since_id", sinceId);
+        if (max_id != null) {
+            params.put("max_id", max_id);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+
+    public void getMentionTimeline(String count, String max_id, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("count", count);
+        if (max_id != null) {
+            params.put("max_id", max_id);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+    public void getFavoriteTimeline(String screenName, String count, String max_id, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("favorites/list.json");
+        RequestParams params = new RequestParams();
+        params.put("count", count);
+        if (max_id != null) {
+            params.put("max_id", max_id);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
+        params.put("screen_name", screenName);
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+
+    public void getUserTimeLine(String screenName, String maxId, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        if (maxId != null) {
+            params.put("max_id", maxId);
+        }
+        if (sinceId != null) {
+            params.put("since_id", sinceId);
+        }
         getClient().get(apiUrl, params, httpResponseHandler);
     }
 
@@ -56,20 +93,67 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, httpResponseHandler);
     }
 
-    public void getOlderTweets(String count, String max_id, JsonHttpResponseHandler httpResponseHandler) {
-        String apiUrl = getApiUrl("statuses/home_timeline.json");
-        RequestParams params = new RequestParams();
-        params.put("count", count);
-        if (TextUtils.isEmpty(max_id))
-            throw new IllegalArgumentException("max_id is not valid");
-        params.put("max_id", max_id);
-        getClient().get(apiUrl, params, httpResponseHandler);
-    }
-
     public void tweet(String text, JsonHttpResponseHandler httpResponseHandler) {
         String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", text);
         getClient().post(apiUrl, params, httpResponseHandler);
     }
+
+    public void getUserTimeLineSince(String screenName, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        params.put("since_id", sinceId);
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+
+    public void getUserTimeLineMax(String screenName, String maxid, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        params.put("max_id", maxid);
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+
+    public void getUserFavoriteTweetsSince(String screenName, String sinceId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("favorites/list.json");
+
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        params.put("since_id", sinceId);
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+
+    public void getUserFavoriteTweetsMaxId(String screenName, String maxid, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("favorites/list.json");
+
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        params.put("screen_name", screenName);
+        params.put("max_id", maxid);
+        getClient().get(apiUrl, params, httpResponseHandler);
+    }
+    public void follow(String userId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("friendships/create.json");
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", userId);
+        params.put("follow", true);
+        getClient().post(apiUrl, params, httpResponseHandler);
+    }
+
+    public void unfollow(String userId, JsonHttpResponseHandler httpResponseHandler) {
+        String apiUrl = getApiUrl("friendships/destroy.json");
+
+        RequestParams params = new RequestParams();
+        params.put("user_id", userId);
+        getClient().post(apiUrl, params, httpResponseHandler);
+    }
+
 }
