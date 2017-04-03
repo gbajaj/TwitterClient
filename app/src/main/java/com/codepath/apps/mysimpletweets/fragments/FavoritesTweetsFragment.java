@@ -35,8 +35,7 @@ public class FavoritesTweetsFragment extends TweetsListFragment {
     }
 
     protected void populateTimeLine(boolean scroll, String maxId, String sinceId, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        String screenName = getArguments().getString(USER);
-        restClient.getFavoriteTimeline(screenName, "25", maxId, sinceId, jsonHttpResponseHandler);
+        restClient.getFavoriteTimeline(user.getScreenName(), "25", maxId, sinceId, jsonHttpResponseHandler);
     }
 
     @Override
@@ -51,6 +50,7 @@ public class FavoritesTweetsFragment extends TweetsListFragment {
         SQLite.select()
                 .from(Tweet.class)
                 .where(Tweet_Table.favorited.is(true))
+                .and(Tweet_Table.user_id.is(user.getId()))
                 .orderBy(Tweet_Table.id, false)
                 .async()
                 .queryResultCallback(callback).execute();

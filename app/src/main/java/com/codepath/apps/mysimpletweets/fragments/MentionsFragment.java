@@ -33,4 +33,8 @@ public class MentionsFragment extends TweetsListFragment {
             super.addTweet(tweet);
         }
     }
+
+    protected boolean isMentionFragment() {
+        return true;
+    }
 }

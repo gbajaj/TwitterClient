@@ -128,6 +128,13 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     tweetAction.userSelected(tweet.getUser());
                 }
             });
+            holder.binding.itemTweetUserImage.setOnClickListener(v -> {
+                if (tweet.getHasRetweetStatus()) {
+                    tweetAction.userSelected(tweet.getRetweetUser());
+                } else {
+                    tweetAction.userSelected(tweet.getUser());
+                }
+            });
 
 
             String time = dateHelper.getRelativeTimeAgo(tweet.getCreatedAt());

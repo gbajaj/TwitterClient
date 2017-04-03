@@ -33,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -65,9 +67,11 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
     FragmentTweetsListBinding binding;
     Long maxId = Long.MAX_VALUE;
     Long sinceId = 1L;
+    HashSet<Long> uniqueTweets = new HashSet<>();
 
     public TweetsListFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -94,11 +98,14 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
 
 
     protected void addTweet(Tweet tweet) {
-        tweets.add(tweet);
-        //tweets.add(0, tweet);
-        aTweets.notifyItemInserted(0);
-        //Scoll the top of the list
-        recyclerView.smoothScrollToPosition(0);
+        if (uniqueTweets.contains(tweet.getId()) == false) {
+            tweets.add(0, tweet);
+            uniqueTweets.add(tweet.getId());
+            //tweets.add(0, tweet);
+            aTweets.notifyItemInserted(0);
+            //Scoll the top of the list
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     @Override
@@ -124,12 +131,17 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
             @Override
             public void onQueryResult(QueryTransaction<Tweet> transaction, @NonNull CursorResult<Tweet> tResult) {
                 tweets.clear();
-                tweets.addAll(tResult.toList());
+                uniqueTweets.clear();
+                addUniqueTweets(tweets, tResult.toList(), true);
                 aTweets.notifyDataSetChanged();
             }
         });
-        //Fetch Fresh Tweets since last time
-        populateTimeLine(false, null, "" + sinceId, new TweetResponseHandler(false));
+        if (NetworkConnectivityHelper.isNetworkAvailable()) {
+            //Fetch Fresh Tweets since last time
+            populateTimeLine(false, null, "" + sinceId, new TweetResponseHandler(false));
+        } else {
+            NetworkConnectivityHelper.notifyNoNetwork(getActivity());
+        }
 
         recyclerView.addOnScrollListener((tweetsAdaptersEndlessScrollListener = new TweetsAdaptersEndlessScrollListener(linearLayoutManager) {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -159,7 +171,11 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
                 }
                 tweets.add(null);
                 aTweets.notifyItemInserted(tweets.size());
-                populateTimeLine(true, "" + maxId, null, new TweetResponseHandler(true));
+                if (NetworkConnectivityHelper.isNetworkAvailable()) {
+                    populateTimeLine(true, "" + maxId, null, new TweetResponseHandler(true));
+                } else {
+                    NetworkConnectivityHelper.notifyNoNetwork(getActivity());
+                }
             }
         }));
 
@@ -191,15 +207,7 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
 
     public void onTweetCreated(Tweet tweet) {
         //a new tweet is just create by the user
-        //Save to the local db
-        tweet.save();
-
-        //add to the time line and notfity the adapter
-        tweets.add(0, tweet);
-        aTweets.notifyItemInserted(0);
-
-        //Scoll the top of the list
-        recyclerView.smoothScrollToPosition(0);
+        addTweet(tweet);
     }
 
     protected void notifyNoNetwork() {
@@ -232,7 +240,7 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
                     tweets.remove(tweets.size() - 1);
                     aTweets.notifyItemRemoved(tweets.size());
                 }
-                ArrayList<Tweet> ret = Tweet.fromJSONArray(response, false);
+                ArrayList<Tweet> ret = Tweet.fromJSONArray(response, isMentionFragment());
                 if (ret.isEmpty() == false) {
                     Collections.sort(ret, (o1, o2) -> {
                         return o2.getId().compareTo(o1.getId());
@@ -240,10 +248,11 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
 
                     if (scroll) {
                         maxId = ret.get(ret.size() - 1).getId() - 1;
+                        addUniqueTweets(tweets, ret, false);
                         tweets.addAll(ret);
                     } else {
                         sinceId = ret.get(0).getId();
-                        tweets.addAll(0, ret);
+                        addUniqueTweets(tweets, ret, true);
                         if (maxId == Long.MAX_VALUE) {
                             //init
                             maxId = ret.get(ret.size() - 1).getId() - 1;
@@ -251,8 +260,6 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
                     }
 
                     saveRow(ret);
-                    //Add tweets to the time line and notify the adapter
-                    tweets.addAll(ret);
                     aTweets.notifyDataSetChanged();
                 }
             } catch (JSONException e) {
@@ -270,20 +277,47 @@ public class TweetsListFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
-        populateTimeLine(false, null, "" + sinceId, new TweetResponseHandler(false));
+        if (NetworkConnectivityHelper.isNetworkAvailable()) {
+            populateTimeLine(false, null, "" + sinceId, new TweetResponseHandler(false));
+        } else {
+            binding.swipeContainer.setRefreshing(false);
+            NetworkConnectivityHelper.notifyNoNetwork(getActivity());
+        }
     }
 
     protected void fetchSavedTweets(QueryTransaction.QueryResultCallback<Tweet> callback) {
 
     }
 
+    //    private removeDuplicates() {}
     private void saveRow(ArrayList<Tweet> list) {
         for (Tweet t : list) {
-            if (t.getRetweetUser()!= null) {
+            if (t.getRetweetUser() != null) {
                 t.getRetweetUser().save();
             }
             t.getUser().save();
             t.save();
         }
+    }
+
+    private void addUniqueTweets(ArrayList<Tweet> tweetsForAdapter, List<Tweet> newTweets, boolean prepend) {
+        ArrayList<Tweet> finalList = new ArrayList<>();
+        for (Tweet t : newTweets) {
+            if (uniqueTweets.contains(t.getId()) == false) {
+                finalList.add(t);
+            }
+        }
+        for (Tweet t : finalList) {
+            uniqueTweets.add(t.getId());
+        }
+        if (prepend) {
+            tweetsForAdapter.addAll(0, finalList);
+        } else {
+            tweetsForAdapter.addAll(finalList);
+        }
+    }
+
+    protected boolean isMentionFragment() {
+        return false;
     }
 }

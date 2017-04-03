@@ -223,7 +223,6 @@ public class ComposeDialogFragment extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         composeTweet = (ComposeTweet) getActivity();
-
     }
 
     @Override

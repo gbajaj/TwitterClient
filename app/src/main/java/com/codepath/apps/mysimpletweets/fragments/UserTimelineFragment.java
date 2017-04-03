@@ -36,8 +36,7 @@ public class UserTimelineFragment extends TweetsListFragment {
     }
 
     protected void populateTimeLine(boolean scroll, String maxId, String sinceId, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        String screenName = getArguments().getString(USER);
-        restClient.getUserTimeLine(screenName, maxId, sinceId, jsonHttpResponseHandler);
+        restClient.getUserTimeLine(user.getScreenName(), maxId, sinceId, jsonHttpResponseHandler);
     }
 
     @Override

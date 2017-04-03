@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.codepath.apps.mysimpletweets.fragments.FavoritesTweetsFragment;
-import com.codepath.apps.mysimpletweets.fragments.HomeTimeLineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 
 /**
@@ -17,10 +17,12 @@ import com.codepath.apps.mysimpletweets.models.User;
  */
 
 public class ProfileFragmentsPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"TWEETS", "PHOTOS", "FAVORITES"};
+    final int PAGE_COUNT = 2;
+    private String tabTitles[] = new String[]{"TWEETS", "FAVORITES"};
     private Context context;
+    private TweetsListFragment tweetsListFragments[] = new TweetsListFragment[]{null,null};
     final User user;
+
     public ProfileFragmentsPagerAdapter(FragmentManager fm, Context context, User user) {
         super(fm);
         this.context = context;
@@ -32,17 +34,22 @@ public class ProfileFragmentsPagerAdapter extends FragmentPagerAdapter {
         return PAGE_COUNT;
     }
 
+    public void addTweet(Tweet tweet) {
+        for (TweetsListFragment tweetsListFragment:tweetsListFragments) {
+            tweetsListFragment.onTweetCreated(tweet);
+        }
+    }
+
     @Override
     public Fragment getItem(int position) {
         TweetsListFragment fragment = null;
         if (position == 0) {
             fragment = UserTimelineFragment.newInstance(user);
         } else if (position == 1) {
-            fragment = new MentionsFragment();
-        } else {
             fragment = FavoritesTweetsFragment.newInstance(user);
         }
-        return fragment;
+        tweetsListFragments[position]  = fragment;
+        return tweetsListFragments[position];
     }
 
     @Override
